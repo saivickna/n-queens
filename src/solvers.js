@@ -94,7 +94,7 @@ window.findNQueensSolution = function(n) {
       var conflict = false;
       for (var k = 0; k < solution.length - 1; k++) {
         var shiftAmount = solution.length - 1 - k;
-        if (levelRows[x] === (solution[k] >>> shiftAmount) || ((levelRows[x] >>> shiftAmount) === solution[k])) {
+        if (levelRows[x] === (solution[k] >> shiftAmount) || ((levelRows[x] >> shiftAmount) === solution[k])) {
           conflict = true;
           break;
         }
@@ -139,7 +139,7 @@ window.countNQueensSolutions = function(n) {
       var conflict = false;
       for (var k = 0; k < solution.length - 1; k++) {
         var shiftAmount = solution.length - 1 - k;
-        if (levelRows[x] === (solution[k] >>> shiftAmount) || ((levelRows[x] >>> shiftAmount) === solution[k])) {
+        if (levelRows[x] === (solution[k] >> shiftAmount) || ((levelRows[x] >> shiftAmount) === solution[k])) {
           conflict = true;
           break;
         }
