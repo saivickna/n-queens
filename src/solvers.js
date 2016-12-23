@@ -122,7 +122,7 @@ window.findNQueensSolution = function(n) {
   return solution;
 };
 
-// window.N = function(Q, u, ee, n, s, H, R) { 
+// window.N = function(Q, u, ee, n, s, H, R) {
 //   s = 0;
 //   Q = u ? Q : (1 << Q) - 1;
 //   H = ~(u | ee | n) & Q;
@@ -131,6 +131,7 @@ window.findNQueensSolution = function(n) {
 //   }
 //   return s += ee == Q;
 // };
+
 // return the number of nxn chessboards that exist, with n queens placed such that none of them can attack each other
 window.countNQueensSolutions = function(n) {
 
@@ -140,21 +141,21 @@ window.countNQueensSolutions = function(n) {
   var sum = 0;
   var placeQueen = function(ld, rd) {
     var row;
-    for (var i = 0; i < n; i++) {
-      row = Math.pow(2, i);
-      if (((row & availRows) === row) && ((ld & row) === 0) && ((rd & row) === 0)) {
-        availRows ^= row;
-        sum = sum | row;
-        if (sum === done) {
+    for (var i = 0; i < n; i++) { // Iterate through each col
+      row = Math.pow(2, i); // determines the col to check
+      if (((row & availRows) === row) && ((ld & row) === 0) && ((rd & row) === 0)) { // ld and rd checks diagonals
+        //      ^--- this checks if the current row is available, cuz &-ing a non-available row would be all zero
+        availRows ^= row; // remove current bit from avail
+        sum = sum | row; // add row to sum
+        if (sum === done) { // if sum is binary of all 1's (n long), we found a solution
           solutionCount++;
         }
-        placeQueen((ld | row) << 1, (rd | row) >> 1);
-        availRows ^= row;
-        sum = sum & ~row;
+        placeQueen((ld | row) << 1, (rd | row) >> 1); // pass in left shifted and right shifted diagonals
+        availRows ^= row; // add back bit to avail
+        sum = sum & ~row; // subtrack row from sum
       }
     }
   };
-
 
   placeQueen(0, 0);
   // solutionCount += halfSolutionCount;
