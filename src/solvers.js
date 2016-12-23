@@ -122,16 +122,63 @@ window.findNQueensSolution = function(n) {
   return solution;
 };
 
+// window.N = function(Q, u, ee, n, s, H, R) { 
+//   s = 0;
+//   Q = u ? Q : (1 << Q) - 1;
+//   H = ~(u | ee | n) & Q;
+//   while (H) {
+//     H ^= R = -H & H, s += N(Q, (u | R) << 1, ee | R, (n | R) >> 1);
+//   }
+//   return s += ee == Q;
+// };
 // return the number of nxn chessboards that exist, with n queens placed such that none of them can attack each other
 window.countNQueensSolutions = function(n) {
+  // var a = [];
+  // var b = [];
+  // var c = [];
+  // var d = [];
+  // for (var i = 0; i < n; i++) {
+  //   a.push(0);
+  //   b.push(0);
+  //   c.push(0);
+  //   d.push(1);
+  // }
+
+  // return N(Math.pow(2, n + 1) - 1, 0, 0, 0, 0);
+
+
+  // var solutionCount = 0;
+  // var availRows = Math.pow(2, n + 1) - 1;
+  // var done = Math.pow(2, n + 1) - 1;
+  // var sum = 0;
+  // var placeQueen = function() {
+  //   var row = 1;
+  //   for (var i = 0; i < n; i++) {
+  //     row = Math.pow(2, i);
+  //     if (row & availRows === row) {
+  //       availRows ^= row;z
+  //       sum += row;
+  //       if (sum === done) {
+  //         solutionCount++;
+  //       }
+  //       placeQueen();
+  //       availRows ^= row;
+  //       sum -= row;
+  //     }
+  //   }
+
+  // };
+
   var solutionCount = 0; 
   var availRows = {};
   for (var i = 0; i < n; i++) {
     availRows[Math.pow(2, i)] = Math.pow(2, i);
   }
+  var halfway = Math.floor(n / 2);
   var solution = [];
-
-  var placeQueen = function() {
+  var count = 0;
+  var halfSolutionCount = 0;
+  var placeQueen = function(depth) {
     var levelRows = _.extend({}, availRows);
     for (var x in levelRows) {
       solution.push(levelRows[x]);
@@ -148,14 +195,27 @@ window.countNQueensSolutions = function(n) {
         if (Object.keys(availRows).length === 0) {
           solutionCount++;
         }
-        placeQueen();
+        placeQueen(depth + 1);
       }
       solution.pop();
       availRows[x] = levelRows[x];
+      if (depth === 0) {
+        count++;
+        if (count === halfway) {
+          halfSolutionCount = solutionCount;
+          if (n % 2 === 0) {
+            break;
+          }
+        }
+        if (count === halfway + 1) {
+          break;
+        }
+      }
     }
   };
 
-  placeQueen();
+  placeQueen(0);
+  solutionCount += halfSolutionCount;
   console.log('Number of solutions for ' + n + ' queens:', solutionCount);
   return solutionCount;
 };
